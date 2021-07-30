@@ -19,8 +19,8 @@ this directory contains:
 - the LICENSE file.
 
 *src* directory contains:
-- GenericHashFunctionsMD5.py (Generates the hash function to select the word and the groups of hash functions to select the bits using MD5)
-- GenericHashFunctionsSHA512.py (Generates the hash function to select the word and the groups of hash functions to select the bits using SHA512)
+- GenericHashFunctionsMD5.py (Generates the hash for the functions that select the counter positions using MD5)
+- GenericHashFunctionsSHA512.py (Generates the hash for the functions that select the counter positions using SHA512)
 - LogScreen and LogFile (To log the different messages generated during the execution).
 - CountingBloomFilter.py (Implementation of the Counting Bloom Filter).
 - tester.py (main script to generate the results of the experiments)
