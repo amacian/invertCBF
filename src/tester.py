@@ -25,7 +25,7 @@ def generate_random_elements(num, cbf=None, ds=None, max_val=1000000000, exclude
     stored = 0
     # Generate elements until the value "stored" is reached
     while stored < num:
-        # Generate integers between 1 and 1 billion 
+        # Generate integers between 1 and max_val
         entry = random.randint(1, max_val)
         # if entry was already selected or is in the exclude set,
         # go to next iteration
@@ -65,10 +65,12 @@ def main():
     hash_f = 'md5'
     # Number of iterations
     it = 10
+    # Maximum size of the universe
+    end_u = -1
 
     # Retrieve the option values from command line
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hm:n:u:s:k:a:i:")
+        opts, args = getopt.getopt(sys.argv[1:], "hm:n:u:s:e:k:a:i:")
     except getopt.GetoptError:
         print('argv[0] -m <size> -n <insertions> -u <universe_size> -s <step_size> -k <nhashes> -a <hash> '
               '-i <iterations>')
@@ -93,7 +95,10 @@ def main():
         # -s option for setting the step to increase the size
         elif opt == "-s":
             step = int(arg)
-            # -k option to set the number of hash elements to select the bits to be set
+        # -e option for setting the step to increase the size
+        elif opt == "-e":
+            end_u = int(arg)
+        # -k option to set the number of hash elements to select the bits to be set
         elif opt == "-k":
             k = int(arg)
         # -a option to change the default md5 hash to other ("sha512" supported)
@@ -104,7 +109,7 @@ def main():
             it = int(arg)
 
     # Pass the parameters to the run function
-    run(m, n, u, step, it, k, hash_f)
+    run(m, n, u, step, end_u, it, k, hash_f)
     return
 
 
@@ -229,7 +234,7 @@ def find_p(cbf, max_val):
     # Create the list P of (true and false) positive elements
     p = list()
     # Check all elements of the universe, from 1 to max_val
-    for i in range(max_val):
+    for i in range(max_val+1):
         # If one of the positions is 0, then it is a negative
         # Otherwise, add it to P
         if cbf.check(i, 1):
@@ -239,7 +244,7 @@ def find_p(cbf, max_val):
 
 
 # Run the actual experiment using the parameters received
-def run(m=65536, n=10000, u=240000, step=30000, iters=10, k=5, hash_f='md5'):
+def run(m=65536, n=10000, u=240000, step=30000, u_end=-1, iters=10, k=5, hash_f='md5'):
     max_val = u
     sc = LogScreen()
 
@@ -309,6 +314,11 @@ def run(m=65536, n=10000, u=240000, step=30000, iters=10, k=5, hash_f='md5'):
             if len(positives) == len(ds) and len(positives.difference(ds)) == 0:
                 # The iteration was completed successfully
                 total_completed = total_completed + 1
+            elif len(positives.difference(ds)) > 0:
+                sc.write("Error: false positives extracted")
+                sc.write(positives.difference(ds))
+                sc.write(ds)
+                exit(1)
             # Accumulate the number of elements retrieved in total_extracted for later processing.
             total_extracted += len(positives)
             # Check for the worst case iteration and store the number of elements extracted
@@ -331,14 +341,17 @@ def run(m=65536, n=10000, u=240000, step=30000, iters=10, k=5, hash_f='md5'):
         log.write(info + "\n")
         log.flush()
 
-        # If no iteration could retrieve the set of elements, finish the process
-        if total_completed == 0:
+        # If total_extracted is less than 1%, finish the process (at least one run was executed)
+        if total_extracted < 0.01 * n:
             break
-        # Otherwise, increase the universe in step elements and run the process again
+
         max_val += step
+
+        if u < u_end < max_val:
+            break
 
     return
 
+
 if __name__ == "__main__":
     main()
-
