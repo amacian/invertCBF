@@ -3,7 +3,7 @@
 This repository includes the implementation in Python of an algorithm to retrieve the content of Counting Bloom Filters 
 for the paper:
 
-P. Reviriego, A. Sánchez-Macián, S. Walzer, E. Merino ... , "On the Privacy of Counting Bloom Filters", 
+P. Reviriego, A. Sánchez-Macián, S. Walzer, E. Merino, S. Liu and F. Lombardi , "On the Privacy of Counting Bloom Filters", 
 under submission to IEEE ...
 
 ## Dependencies
