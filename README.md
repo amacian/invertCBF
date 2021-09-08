@@ -17,6 +17,7 @@ this directory contains:
 
 - runCBF.bat and runCBFdetail.bat scripts to retrieve the information used in some of the experiments of the paper and identify parameters.
 - runUseCases.bat script to retrieve the information used in the paper to collect the results for the WordLex dataset use cases.
+- expectedRecovered.sage script on sagemath (developed by S. Walzer) that reproduces the curves corresponding to the expected fraction of recovered elements
 - this README file.
 - the LICENSE file.
 
