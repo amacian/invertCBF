@@ -4,7 +4,7 @@ This repository includes the implementation in Python of an algorithm to retriev
 for the paper:
 
 P. Reviriego, A. Sánchez-Macián, S. Walzer, E. Merino, S. Liu and F. Lombardi , "On the Privacy of Counting Bloom Filters", 
-under submission to IEEE ...
+under submission to IEEE Transactions on Dependable and Secure Computing
 
 ## Dependencies
 - Python > 3.9
